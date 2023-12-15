@@ -1,4 +1,5 @@
 # Copyright 2019 The Google Research Authors.
+# Copyright 2023 Stefan Dendorfer.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -34,7 +35,7 @@ _TOTAL_VAR = 'total_time'
 # Get with estimator.get_variable_value(TOTAL_TIME_NAME) after
 # running estimator.train(). Note that this time includes the time spent in
 # previous calls to train() as well.
-TOTAL_TIME_NAME = '%s/%s' % (_SCOPE_NAME, _TOTAL_VAR)
+TOTAL_TIME_NAME = f'{_SCOPE_NAME}{_TOTAL_VAR}'
 
 # We have a fixed temporal precision of one millisecond.
 # We used fixed precision to represent seconds since the epoch, as a tf.int64,

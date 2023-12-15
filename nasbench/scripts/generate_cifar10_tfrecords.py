@@ -1,4 +1,5 @@
 # Copyright 2019 The Google Research Authors.
+# Copyright 2023 Stefan Dendorfer.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -62,7 +63,7 @@ def _get_file_names():
   """Returns the file names expected to exist in the input_dir."""
   file_names = {}
   for i in range(1, 5):
-    file_names['train_%d' % i] = 'data_batch_%d' % i
+    file_names[f'train_{i}'] = f'data_batch_{i}'
   file_names['validation'] = 'data_batch_5'
   file_names['test'] = 'test_batch'
   return file_names
@@ -79,13 +80,13 @@ def read_pickle_from_file(filename):
 
 def convert_to_tfrecord(input_file, output_file):
   """Converts a file to TFRecords."""
-  print('Generating %s' % output_file)
+  print(f'Generating {output_file}')
   with tf.python_io.TFRecordWriter(output_file) as record_writer:
     data_dict = read_pickle_from_file(input_file)
     data = data_dict[b'data']
     labels = data_dict[b'labels']
     num_entries_in_batch = len(labels)
-    print('Converting %d images' % num_entries_in_batch)
+    print('Converting {num_entries_in_batch} images')
     for i in range(num_entries_in_batch):
       example = tf.train.Example(features=tf.train.Features(
           feature={
@@ -96,7 +97,7 @@ def convert_to_tfrecord(input_file, output_file):
 
 
 def main(data_dir):
-  print('Download from {} and extract.'.format(CIFAR_DOWNLOAD_URL))
+  print(f'Download from {CIFAR_DOWNLOAD_URL} and extract.')
   download_and_extract(data_dir)
   file_names = _get_file_names()
   input_dir = os.path.join(data_dir, CIFAR_LOCAL_FOLDER)
@@ -133,7 +134,7 @@ def main(data_dir):
         break
 
   output_file = os.path.join(data_dir, 'sample.tfrecords')
-  print('Generating %s' % output_file)
+  print('Generating {output_file}')
   with tf.python_io.TFRecordWriter(output_file) as record_writer:
     for label_images in images:
       for example in label_images:

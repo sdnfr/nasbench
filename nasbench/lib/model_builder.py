@@ -1,4 +1,5 @@
 # Copyright 2019 The Google Research Authors.
+# Copyright 2023 Stefan Dendorfer.
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -75,9 +76,9 @@ def build_model_fn(spec, config, num_train_images):
         # Double output channels each time we downsample
         channels *= 2
 
-      with tf.variable_scope('stack{}'.format(stack_num)):
+      with tf.variable_scope(f'stack{stack_num}'):
         for module_num in range(config['num_modules_per_stack']):
-          with tf.variable_scope('module{}'.format(module_num)):
+          with tf.variable_scope(f'module{module_num}'):
             net = build_module(
                 spec,
                 inputs=net,
@@ -150,7 +151,7 @@ def build_model_fn(spec, config, num_train_images):
         input_grad_norm = tf.expand_dims(tf.constant(0.0), 0)
 
       covariance_matrices = {
-          'cov_matrix_%d' % i:
+          f'cov_matrix_{i}':
           tf.expand_dims(_covariance_matrix(aux), 0)
           for i, aux in enumerate(aux_activations)
       }
@@ -279,7 +280,7 @@ def build_module(spec, inputs, channels, is_training):
 
   final_concat_in = []
   for t in range(1, num_vertices - 1):
-    with tf.variable_scope('vertex_{}'.format(t)):
+    with tf.variable_scope(f'vertex_{t}'):
       # Create interior connections, truncating if necessary
       add_in = [truncate(tensors[src], vertex_channels[t], spec.data_format)
                 for src in range(1, t) if spec.matrix[src, t]]
