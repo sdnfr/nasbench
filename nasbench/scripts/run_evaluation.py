@@ -86,14 +86,14 @@ CHECKPOINT_1_PREFIX = 'model.ckpt-1.'
 class NumpyEncoder(json.JSONEncoder):
   """Converts numpy objects to JSON-serializable format."""
 
-  def default(self, obj):
-    if isinstance(obj, np.ndarray):
+  def default(self, o):
+    if isinstance(o, np.ndarray):
       # Matrices converted to nested lists
-      return obj.tolist()
-    elif isinstance(obj, np.generic):
+      return o.tolist()
+    elif isinstance(o, np.generic):
       # Scalars converted to closest Python type
-      return np.asscalar(obj)
-    return json.JSONEncoder.default(self, obj)
+      return np.asscalar(o)
+    return json.JSONEncoder.default(self, o)
 
 
 class Evaluator(object):
