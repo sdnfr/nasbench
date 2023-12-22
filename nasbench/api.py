@@ -194,8 +194,9 @@ class NASBench(object):
 
       self.computed_statistics[module_hash][epochs].append(data_point)
 
+
     elapsed = time.time() - start
-    print('Loaded dataset in %d seconds' % elapsed)
+    print(f'Loaded dataset in {elapsed} seconds')
 
     self.history = {}
     self.training_time_spent = 0.0
@@ -231,8 +232,9 @@ class NASBench(object):
       OutOfDomainError: if model_spec or num_epochs is outside the search space.
     """
     if epochs not in self.valid_epochs:
-      raise OutOfDomainError('invalid number of epochs, must be one of %s'
-                             % self.valid_epochs)
+      raise OutOfDomainError('invalid number of epochs,'
+                             'must be one of {self.valid_epochs}'
+                             )
 
     fixed_stat, computed_stat = self.get_metrics_from_spec(model_spec)
     sampled_index = random.randint(0, self.config['num_repeats'] - 1)
@@ -374,12 +376,13 @@ class NASBench(object):
     num_edges = np.sum(model_spec.matrix)
 
     if num_vertices > self.config['module_vertices']:
-      raise OutOfDomainError('too many vertices, got %d (max vertices = %d)'
-                             % (num_vertices, config['module_vertices']))
+      raise OutOfDomainError('too many vertices, got {num_vertices}'
+                             '(max vertices = %d)'
+                             % self.config['module_vertices'])
 
     if num_edges > self.config['max_edges']:
-      raise OutOfDomainError('too many edges, got %d (max edges = %d)'
-                             % (num_edges, self.config['max_edges']))
+      raise OutOfDomainError('too many edges, got {num_edges} (max edges = %d)'
+                             % self.config['max_edges'])
 
     if model_spec.ops[0] != 'input':
       raise OutOfDomainError('first operation should be \'input\'')
@@ -387,8 +390,8 @@ class NASBench(object):
       raise OutOfDomainError('last operation should be \'output\'')
     for op in model_spec.ops[1:-1]:
       if op not in self.config['available_ops']:
-        raise OutOfDomainError('unsupported op %s (available ops = %s)'
-                               % (op, self.config['available_ops']))
+        raise OutOfDomainError('unsupported op {op} (available ops = %s)'
+                               % self.config['available_ops'])
 
   def _hash_spec(self, model_spec):
     """Returns the MD5 hash for a provided model_spec."""

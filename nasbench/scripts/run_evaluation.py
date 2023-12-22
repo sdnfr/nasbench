@@ -188,7 +188,7 @@ class Evaluator(object):
     model_dir = os.path.join(self.output_dir,
                              model_id[:2],
                              model_id,
-                             'repeat_%d' % model_repeat)
+                             f'repeat_{model_repeat}')
     try:
       meta = evaluate.train_and_evaluate(spec, self.config, model_dir)
     except evaluate.AbortError:
