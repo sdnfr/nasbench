@@ -163,7 +163,7 @@ class _TimingRunHook(tf.train.SessionRunHook):
           timing_vars.previous_time +
           _internal_time_to_seconds(self._end_op - self._start_op))
 
-  def before_run(self, run_context):
+  def before_run(self, run_context): # pylint: disable=unused-argument
     return tf.train.SessionRunArgs([self._total_op, self._step_op])
 
   def after_run(self, run_context, run_values):
@@ -185,10 +185,10 @@ class _TimingSaverListener(tf.train.CheckpointSaverListener):
       # Marks that timing_vars.start_timestamp should be reset in the next step.
       self._reset_steps_op = timing_vars.steps.assign(0)
 
-  def before_save(self, session, global_step_value):
+  def before_save(self, session, global_step_value): # pylint: disable=unused-argument
     session.run(self._prev_op)
 
-  def after_save(self, session, global_step_value):
+  def after_save(self, session, global_step_value): # pylint: disable=unused-argument
     session.run(self._reset_steps_op)
 
 

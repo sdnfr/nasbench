@@ -123,7 +123,9 @@ class _TrainAndEvaluator(object):
           timing = training_time.limit(None)
 
         evaluations = map(float, self.config['intermediate_evaluations'])
-        if not evaluations or evaluations[-1] != 1.0:
+        _, last_value = list(evaluations.items())[-1]
+
+        if not evaluations or last_value != 1.0:
           evaluations.append(1.0)
         assert evaluations == sorted(evaluations)
 
@@ -159,7 +161,7 @@ class _TrainAndEvaluator(object):
         attempts += 1
         tf.logging.warning(str(e))
         if attempts >= self.config['max_attempts']:
-          raise AbortError(str(e))
+          raise AbortError(str(e)) from e
 
     metadata = {
         'trainable_params': _get_param_count(self.model_dir),
